@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.devcompanion.app-merged_res-5:/layout_activity_main.xml.flat",
+        "source": "com.devcompanion.app-main-7:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.devcompanion.app-merged_res-5:/layout_dialog_model_picker.xml.flat",
+        "source": "com.devcompanion.app-main-7:/layout/dialog_model_picker.xml"
+    }
+]
