@@ -1,96 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- Button to select Chat Model -->
-    <Button
-        android:id="@+id/btnSelectChatModel"
+    <!-- Main content -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Chat Model" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- Display path for Chat Model -->
-    <TextView
-        android:id="@+id/txtChatModelPath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No chat model selected"
-        android:layout_marginBottom="16dp"
-        android:textColor="#666666"
-        android:textSize="14sp" />
-
-    <!-- Button to select Code Model -->
-    <Button
-        android:id="@+id/btnSelectCodeModel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Code Model" />
-
-    <!-- Display path for Code Model -->
-    <TextView
-        android:id="@+id/txtCodeModelPath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No code model selected"
-        android:layout_marginBottom="16dp"
-        android:textColor="#666666"
-        android:textSize="14sp" />
-
-    <!-- Button to confirm models -->
-    <Button
-        android:id="@+id/btnConfirmModels"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Confirm Models" />
-
-    <!-- Status text for showing copy progress -->
-    <TextView
-        android:id="@+id/txtStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="#333333"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:visibility="visible" />
-
-    <!-- Progress spinner (indeterminate) -->
-    <ProgressBar
-        android:id="@+id/progress_spinner"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:visibility="gone" />
-
-    <!-- Debug log label -->
-    <TextView
-        android:id="@+id/debug_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Debug Log:"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp" />
-
-    <!-- Scrollable area for debug log -->
-    <ScrollView
-        android:id="@+id/log_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#EEEEEE"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/debug_log"
+        <!-- Toolbar placeholder (optional) -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:textIsSelectable="true" />
-    </ScrollView>
-</LinearLayout>
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:title="Dev Companion" />
+
+        <!-- Container for fragments -->
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <!-- Navigation drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/navigation" />
+</androidx.drawerlayout.widget.DrawerLayout>

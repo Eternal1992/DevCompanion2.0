@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item
+        android:id="@+id/nav_model_selector"
+        android:title="Model Selector"
+        android:icon="@android:drawable/ic_menu_upload" />
+
+    <item
+        android:id="@+id/nav_chat"
+        android:title="Chat"
+        android:icon="@android:drawable/ic_menu_send" />
+
+</menu>
