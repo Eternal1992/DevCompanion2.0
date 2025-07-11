@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/txtChatModelPath"
+    <Button
+        android:id="@+id/choose_models_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chat AI: Not selected" />
+        android:text="Choose AI Models" />
 
     <Button
-        android:id="@+id/btnSelectChatModel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Chat AI Model" />
-
-    <TextView
-        android:id="@+id/txtCodeModelPath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Code AI: Not selected"
-        android:layout_marginTop="16dp" />
-
-    <Button
-        android:id="@+id/btnSelectCodeModel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Code AI Model" />
-
-    <Button
-        android:id="@+id/btnConfirmModels"
+        android:id="@+id/confirm_models_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Confirm Models"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="8dp" />
 
+    <TextView
+        android:id="@+id/debug_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Debug Log:"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp" />
+
+    <ScrollView
+        android:id="@+id/log_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#EEEEEE"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/debug_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textIsSelectable="true" />
+    </ScrollView>
 </LinearLayout>
