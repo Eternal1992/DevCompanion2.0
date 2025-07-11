@@ -2,10 +2,11 @@ package com.devcompanion;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.DocumentsContract;
+import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -26,35 +27,41 @@ public class MainActivity extends AppCompatActivity {
     private Uri[] selectedUris;
     private TextView debugLog;
     private ScrollView logScroll;
-    private ProgressBar progressSpinner;
-    private TextView copyStatus;
+
+    private ProgressBar spinner;
+    private TextView statusText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button chooseBtn = findViewById(R.id.btnSelectChatModel);  // You can rename if needed
+        Button chooseBtn = findViewById(R.id.btnSelectChatModel);
+        Button codeChooseBtn = findViewById(R.id.btnSelectCodeModel);
         Button confirmBtn = findViewById(R.id.btnConfirmModels);
+
         debugLog = findViewById(R.id.debug_log);
         logScroll = findViewById(R.id.log_scroll);
-        progressSpinner = findViewById(R.id.progress_spinner);
-        copyStatus = findViewById(R.id.copy_status);
+
+        spinner = findViewById(R.id.progress_spinner);
+        statusText = findViewById(R.id.txtStatus);
 
         chooseBtn.setOnClickListener(view -> openModelSelector());
+        codeChooseBtn.setOnClickListener(view -> openModelSelector());
 
         confirmBtn.setOnClickListener(view -> {
             if (selectedUris == null || selectedUris.length == 0) {
                 toast("No models selected");
             } else {
                 appendLog("Starting model copy...");
-                showCopyingUI(true);
-                new Thread(() -> {
-                    copyModels(selectedUris);
-                    runOnUiThread(() -> showCopyingUI(false));
-                }).start();
+                showSpinner(true);
+                new Thread(() -> copyModels(selectedUris)).start();
             }
         });
+
+        // Initially hide spinner and clear status
+        showSpinner(false);
+        statusText.setText("");
     }
 
     private void openModelSelector() {
@@ -86,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
         File destDir = new File(getFilesDir(), "ai_models");
         if (!destDir.exists() && !destDir.mkdirs()) {
             appendLog("Failed to create model directory.");
+            updateStatus("Failed to create model directory.");
+            showSpinner(false);
             return;
         }
 
@@ -94,12 +103,14 @@ public class MainActivity extends AppCompatActivity {
                 String fileName = getFileName(uri);
                 if (fileName == null) {
                     appendLog("Skipped unnamed file");
+                    updateStatus("Skipped unnamed file");
                     continue;
                 }
+                updateStatus("Copying model: " + fileName);
                 File outFile = new File(destDir, fileName);
                 try (
-                        InputStream in = getContentResolver().openInputStream(uri);
-                        FileOutputStream out = new FileOutputStream(outFile)
+                    InputStream in = getContentResolver().openInputStream(uri);
+                    FileOutputStream out = new FileOutputStream(outFile)
                 ) {
                     byte[] buffer = new byte[8192];
                     int len;
@@ -110,22 +121,29 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 appendLog("Error copying: " + e.getMessage());
+                updateStatus("Error copying: " + e.getMessage());
             }
         }
 
         appendLog("Model copy complete.");
+        updateStatus("Model copy complete.");
+        showSpinner(false);
     }
 
     private String getFileName(Uri uri) {
-        try {
-            String result = DocumentsContract.getDocumentId(uri);
-            if (result != null && result.contains(":")) {
-                return result.split(":")[1];
+        String result = null;
+        try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                if (nameIndex >= 0) {
+                    result = cursor.getString(nameIndex);
+                }
             }
         } catch (Exception e) {
-            appendLog("Error retrieving filename");
+            appendLog("Error retrieving filename: " + e.getMessage());
+            updateStatus("Error retrieving filename");
         }
-        return null;
+        return result;
     }
 
     private void toast(String msg) {
@@ -139,10 +157,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showCopyingUI(boolean isCopying) {
-        runOnUiThread(() -> {
-            progressSpinner.setVisibility(isCopying ? View.VISIBLE : View.GONE);
-            copyStatus.setText(isCopying ? "Copying models..." : "");
-        });
+    private void updateStatus(String text) {
+        runOnUiThread(() -> statusText.setText(text));
+    }
+
+    private void showSpinner(boolean show) {
+        runOnUiThread(() -> spinner.setVisibility(show ? View.VISIBLE : View.GONE));
     }
 }
