@@ -5,27 +5,57 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Button to select Chat Model -->
     <Button
-        android:id="@+id/choose_models_btn"
+        android:id="@+id/btnSelectChatModel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Choose AI Models" />
+        android:text="Select Chat Model" />
 
-    <Button
-        android:id="@+id/confirm_models_btn"
+    <!-- Display path for Chat Model -->
+    <TextView
+        android:id="@+id/txtChatModelPath"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Confirm Models"
-        android:layout_marginTop="8dp" />
+        android:text="No chat model selected"
+        android:layout_marginBottom="16dp"
+        android:textColor="#666666"
+        android:textSize="14sp" />
 
+    <!-- Button to select Code Model -->
+    <Button
+        android:id="@+id/btnSelectCodeModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Code Model" />
+
+    <!-- Display path for Code Model -->
+    <TextView
+        android:id="@+id/txtCodeModelPath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No code model selected"
+        android:layout_marginBottom="16dp"
+        android:textColor="#666666"
+        android:textSize="14sp" />
+
+    <!-- Button to confirm models -->
+    <Button
+        android:id="@+id/btnConfirmModels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confirm Models" />
+
+    <!-- Debug log label -->
     <TextView
         android:id="@+id/debug_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Debug Log:"
         android:textStyle="bold"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="24dp" />
 
+    <!-- Scrollable area for debug log -->
     <ScrollView
         android:id="@+id/log_scroll"
         android:layout_width="match_parent"
