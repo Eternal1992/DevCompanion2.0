@@ -4,93 +4,132 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
+import android.os.Handler;
+import android.provider.DocumentsContract;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-    private static final int REQUEST_CHAT_MODEL = 100;
-    private static final int REQUEST_CODE_MODEL = 101;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
-    private Uri chatModelUri = null;
-    private Uri codeModelUri = null;
+public class MainActivity extends AppCompatActivity {
 
-    private TextView chatModelPath;
-    private TextView codeModelPath;
+    private static final int PICK_MODELS_REQUEST_CODE = 100;
+    private Uri[] selectedUris;
+    private TextView debugLog;
+    private ScrollView logScroll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button selectChatBtn = findViewById(R.id.btnSelectChatModel);
-        Button selectCodeBtn = findViewById(R.id.btnSelectCodeModel);
-        Button confirmBtn = findViewById(R.id.btnConfirmModels);
+        Button chooseBtn = findViewById(R.id.choose_models_btn);
+        Button confirmBtn = findViewById(R.id.confirm_models_btn);
+        debugLog = findViewById(R.id.debug_log);
+        logScroll = findViewById(R.id.log_scroll);
 
-        chatModelPath = findViewById(R.id.txtChatModelPath);
-        codeModelPath = findViewById(R.id.txtCodeModelPath);
+        chooseBtn.setOnClickListener(view -> openModelSelector());
 
-        selectChatBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickModelFile(REQUEST_CHAT_MODEL);
-            }
-        });
-
-        selectCodeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickModelFile(REQUEST_CODE_MODEL);
-            }
-        });
-
-        confirmBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (chatModelUri != null && codeModelUri != null) {
-                    Toast.makeText(MainActivity.this, "Models selected successfully!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Please select both models.", Toast.LENGTH_SHORT).show();
-                }
+        confirmBtn.setOnClickListener(view -> {
+            if (selectedUris == null || selectedUris.length == 0) {
+                toast("No models selected");
+            } else {
+                appendLog("Confirmed models... Preparing to copy.");
+                new Thread(() -> copyModels(selectedUris)).start();
             }
         });
     }
 
-    private void pickModelFile(int requestCode) {
+    private void openModelSelector() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(Intent.createChooser(intent, "Select AI Model"), requestCode);
+        startActivityForResult(intent, PICK_MODELS_REQUEST_CODE);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            Uri uri = data.getData();
-            String fileName = getFileName(uri);
-            if (requestCode == REQUEST_CHAT_MODEL) {
-                chatModelUri = uri;
-                chatModelPath.setText("Chat AI: " + fileName);
-            } else if (requestCode == REQUEST_CODE_MODEL) {
-                codeModelUri = uri;
-                codeModelPath.setText("Code AI: " + fileName);
+        if (requestCode == PICK_MODELS_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            if (data.getClipData() != null) {
+                int count = data.getClipData().getItemCount();
+                selectedUris = new Uri[count];
+                for (int i = 0; i < count; i++) {
+                    selectedUris[i] = data.getClipData().getItemAt(i).getUri();
+                }
+            } else if (data.getData() != null) {
+                selectedUris = new Uri[]{data.getData()};
             }
+            appendLog("Selected " + selectedUris.length + " model(s)");
         }
     }
 
-    private String getFileName(Uri uri) {
-        String result = "Unknown";
-        if (uri.getScheme().equals("content")) {
-            try (android.database.Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+    private void copyModels(Uri[] uris) {
+        File destDir = new File(getFilesDir(), "ai_models");
+        if (!destDir.exists() && !destDir.mkdirs()) {
+            appendLog("Failed to create model directory.");
+            return;
+        }
+
+        appendLog("Copying models to: " + destDir.getAbsolutePath());
+
+        for (Uri uri : uris) {
+            try {
+                String fileName = getFileName(uri);
+                if (fileName == null) {
+                    appendLog("Skipped file: name not found");
+                    continue;
                 }
+
+                File outFile = new File(destDir, fileName);
+                try (
+                    InputStream in = getContentResolver().openInputStream(uri);
+                    FileOutputStream out = new FileOutputStream(outFile)
+                ) {
+                    byte[] buffer = new byte[8192];
+                    int len;
+                    while ((len = in.read(buffer)) > 0) {
+                        out.write(buffer, 0, len);
+                    }
+                    appendLog("Copied: " + fileName);
+                }
+            } catch (Exception e) {
+                appendLog("Error copying model: " + e.getMessage());
             }
         }
-        return result;
+
+        appendLog("✅ All models copied successfully.");
+    }
+
+    private String getFileName(Uri uri) {
+        try {
+            String result = DocumentsContract.getDocumentId(uri);
+            if (result != null && result.contains(":")) {
+                return result.split(":")[1];
+            }
+        } catch (Exception e) {
+            appendLog("Error reading filename: " + e.getMessage());
+        }
+        return null;
+    }
+
+    private void toast(String msg) {
+        runOnUiThread(() -> Toast.makeText(this, msg, Toast.LENGTH_SHORT).show());
+    }
+
+    private void appendLog(String text) {
+        runOnUiThread(() -> {
+            debugLog.append(text + "\n");
+            logScroll.post(() -> logScroll.fullScroll(View.FOCUS_DOWN));
+        });
     }
 }
