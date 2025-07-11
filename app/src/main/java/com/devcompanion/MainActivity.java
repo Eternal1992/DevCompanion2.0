@@ -1,12 +1,9 @@
 package com.devcompanion;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.DocumentsContract;
 import android.view.View;
 import android.widget.Button;
@@ -23,8 +20,14 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int PICK_MODELS_REQUEST_CODE = 100;
-    private Uri[] selectedUris;
+    private static final int PICK_CHAT_MODEL_CODE = 1;
+    private static final int PICK_CODE_MODEL_CODE = 2;
+
+    private Uri chatModelUri;
+    private Uri codeModelUri;
+
+    private TextView txtChatModelPath;
+    private TextView txtCodeModelPath;
     private TextView debugLog;
     private ScrollView logScroll;
 
@@ -32,89 +35,97 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button chooseBtn = findViewById(R.id.choose_models_btn);
-        Button confirmBtn = findViewById(R.id.confirm_models_btn);
+
+        Button btnChatModel = findViewById(R.id.btnSelectChatModel);
+        Button btnCodeModel = findViewById(R.id.btnSelectCodeModel);
+        Button btnConfirm = findViewById(R.id.btnConfirmModels);
+
+        txtChatModelPath = findViewById(R.id.txtChatModelPath);
+        txtCodeModelPath = findViewById(R.id.txtCodeModelPath);
         debugLog = findViewById(R.id.debug_log);
         logScroll = findViewById(R.id.log_scroll);
 
-        chooseBtn.setOnClickListener(view -> openModelSelector());
-
-        confirmBtn.setOnClickListener(view -> {
-            if (selectedUris == null || selectedUris.length == 0) {
-                toast("No models selected");
+        btnChatModel.setOnClickListener(v -> openModelSelector(PICK_CHAT_MODEL_CODE));
+        btnCodeModel.setOnClickListener(v -> openModelSelector(PICK_CODE_MODEL_CODE));
+        btnConfirm.setOnClickListener(v -> {
+            if (chatModelUri == null || codeModelUri == null) {
+                toast("Please select both models first.");
             } else {
                 appendLog("🔄 Starting model copy...");
-                new Thread(() -> copyModels(selectedUris)).start();
+                new Thread(() -> copyModels()).start();
             }
         });
     }
 
-    private void openModelSelector() {
+    private void openModelSelector(int requestCode) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, PICK_MODELS_REQUEST_CODE);
+        startActivityForResult(intent, requestCode);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_MODELS_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            if (data.getClipData() != null) {
-                int count = data.getClipData().getItemCount();
-                selectedUris = new Uri[count];
-                for (int i = 0; i < count; i++) {
-                    selectedUris[i] = data.getClipData().getItemAt(i).getUri();
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                String fileName = getFileName(uri);
+                if (requestCode == PICK_CHAT_MODEL_CODE) {
+                    chatModelUri = uri;
+                    txtChatModelPath.setText(fileName != null ? fileName : uri.toString());
+                    appendLog("📥 Chat model selected: " + fileName);
+                } else if (requestCode == PICK_CODE_MODEL_CODE) {
+                    codeModelUri = uri;
+                    txtCodeModelPath.setText(fileName != null ? fileName : uri.toString());
+                    appendLog("📥 Code model selected: " + fileName);
                 }
-            } else if (data.getData() != null) {
-                selectedUris = new Uri[]{data.getData()};
             }
-            appendLog("📂 Selected " + selectedUris.length + " model(s)");
         }
     }
 
-    private void copyModels(Uri[] uris) {
+    private void copyModels() {
         File destDir = new File(getFilesDir(), "ai_models");
         if (!destDir.exists() && !destDir.mkdirs()) {
             appendLog("❌ Failed to create model directory.");
             return;
         }
 
-        for (Uri uri : uris) {
-            try {
-                String fileName = getFileName(uri);
-                if (fileName == null) {
-                    appendLog("⚠️ Skipped unnamed file");
-                    continue;
-                }
-
-                File outFile = new File(destDir, fileName);
-                if (outFile.exists()) {
-                    appendLog("↪️ Replacing existing model: " + fileName);
-                    outFile.delete();
-                } else {
-                    appendLog("📄 Copying model: " + fileName);
-                }
-
-                try (
-                    InputStream in = getContentResolver().openInputStream(uri);
-                    FileOutputStream out = new FileOutputStream(outFile)
-                ) {
-                    byte[] buffer = new byte[8192];
-                    int len;
-                    while ((len = in.read(buffer)) > 0) {
-                        out.write(buffer, 0, len);
-                    }
-                    appendLog("✅ Copied: " + fileName);
-                }
-
-            } catch (Exception e) {
-                appendLog("❌ Error copying: " + e.getMessage());
-            }
-        }
+        copySingleModel(chatModelUri, destDir, "chat model");
+        copySingleModel(codeModelUri, destDir, "code model");
 
         appendLog("✅ Model copy complete.");
+    }
+
+    private void copySingleModel(Uri uri, File destDir, String label) {
+        try {
+            String fileName = getFileName(uri);
+            if (fileName == null) {
+                appendLog("⚠️ Skipped unnamed " + label);
+                return;
+            }
+
+            File outFile = new File(destDir, fileName);
+            if (outFile.exists()) {
+                appendLog("↪️ Replacing existing file: " + fileName);
+                outFile.delete();
+            }
+
+            try (
+                InputStream in = getContentResolver().openInputStream(uri);
+                FileOutputStream out = new FileOutputStream(outFile)
+            ) {
+                byte[] buffer = new byte[8192];
+                int len;
+                while ((len = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, len);
+                }
+                appendLog("✅ Copied " + label + ": " + fileName);
+            }
+
+        } catch (Exception e) {
+            appendLog("❌ Error copying " + label + ": " + e.getMessage());
+        }
     }
 
     private String getFileName(Uri uri) {
