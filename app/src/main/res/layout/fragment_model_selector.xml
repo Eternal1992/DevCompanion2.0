@@ -49,7 +49,7 @@
             android:textColorHint="@color/hint_text"
             android:hint="Choose Chat Model"
             android:layout_marginBottom="24dp"
-            app:endIconMode="dropdown" />
+            app:endIconMode="dropdown_menu" />
 
         <!-- Code Model Selector -->
         <TextView
@@ -73,7 +73,7 @@
             android:textColorHint="@color/hint_text"
             android:hint="Choose Code Model"
             android:layout_marginBottom="32dp"
-            app:endIconMode="dropdown" />
+            app:endIconMode="dropdown_menu" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_confirm_models"
@@ -82,7 +82,7 @@
             android:text="Confirm Models"
             android:textColor="@color/button_text"
             android:backgroundTint="@color/accent"
-            android:cornerRadius="12dp"
+            app:cornerRadius="12dp"
             android:padding="16dp"
             android:textAllCaps="false"
             app:iconGravity="textStart"
