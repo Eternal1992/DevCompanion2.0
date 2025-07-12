@@ -1,13 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme (uses system setting) -->
+    <!-- Base application theme using Material Components -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your theme here -->
+        <!-- Customize your theme colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- Text and background overrides -->
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@color/dark_background</item>
+
+        <!-- Optional: Control ripple, button, etc. -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
     </style>
 
 </resources>
