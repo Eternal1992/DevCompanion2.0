@@ -1,13 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Dark mode colors -->
-    <color name="black">#000000</color>
-    <color name="dark_background">#121212</color>
-    <color name="dark_gray">#222222</color>
-    <color name="white">#FFFFFF</color>
-    <color name="light_gray">#CCCCCC</color>
-
-    <!-- Primary color for toolbar and accent -->
-    <color name="colorPrimary">#BB86FC</color> <!-- A nice purple-ish -->
-    <color name="colorPrimaryDark">#3700B3</color>
+    <!-- Dark mode primary theme colors -->
+    <color name="colorPrimary">#121212</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <!-- Background and surface colors -->
+    <color name="background">#121212</color>
+    <color name="surface">#1E1E1E</color>
+
+    <!-- Text colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3B3B3</color>
+
+    <!-- Drawer / navigation tinting -->
+    <color name="nav_background">#1A1A1A</color>
+    <color name="nav_item_text">#FFFFFF</color>
+    <color name="nav_item_icon">#B3B3B3</color>
+
+    <!-- Button and border helpers -->
+    <color name="button_background">#2C2C2C</color>
+    <color name="button_text">#FFFFFF</color>
+    <color name="divider">#333333</color>
 </resources>
