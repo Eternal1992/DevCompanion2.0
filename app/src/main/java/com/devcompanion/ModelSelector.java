@@ -35,6 +35,8 @@ public class ModelSelector extends Fragment {
     private ProgressBar progressSpinner;
     private TextView debugStatus;
 
+    private SharedPreferences prefs;
+
     public ModelSelector() {
         // Required empty constructor
     }
@@ -62,7 +64,7 @@ public class ModelSelector extends Fragment {
         codeModelDropdown.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, codeModels));
 
         // Load saved model names
-        SharedPreferences prefs = requireActivity().getSharedPreferences("devcompanion_models", Activity.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences("devcompanion_models", Activity.MODE_PRIVATE);
         chatModelDropdown.setText(prefs.getString("chat_model", ""), false);
         codeModelDropdown.setText(prefs.getString("code_model", ""), false);
 
@@ -90,7 +92,7 @@ public class ModelSelector extends Fragment {
             }, 1000);
         });
 
-        // Add file picker
+        // Add file picker button (already added dynamically)
         filePickerButton = new MaterialButton(requireContext());
         filePickerButton.setText("Pick Local Model File");
         filePickerButton.setBackgroundTintList(requireContext().getColorStateList(R.color.accent));
@@ -102,7 +104,7 @@ public class ModelSelector extends Fragment {
             startActivityForResult(Intent.createChooser(intent, "Select Model File"), PICK_MODEL_FILE_REQUEST);
         });
 
-        // Add Reset Chat Model button
+        // Reset buttons for chat and code models
         resetChatButton = new MaterialButton(requireContext());
         resetChatButton.setText("Reset Chat Model");
         resetChatButton.setBackgroundTintList(requireContext().getColorStateList(R.color.accent));
@@ -113,7 +115,6 @@ public class ModelSelector extends Fragment {
             Toast.makeText(getContext(), "Chat model reset.", Toast.LENGTH_SHORT).show();
         });
 
-        // Add Reset Code Model button
         resetCodeButton = new MaterialButton(requireContext());
         resetCodeButton.setText("Reset Code Model");
         resetCodeButton.setBackgroundTintList(requireContext().getColorStateList(R.color.accent));
@@ -143,6 +144,10 @@ public class ModelSelector extends Fragment {
                 String fileName = getFileName(uri);
                 Toast.makeText(getContext(), "Selected file: " + fileName, Toast.LENGTH_SHORT).show();
                 debugStatus.setText("Status: Selected file: " + fileName);
+
+                // Update chat model dropdown text and prefs immediately on file select
+                chatModelDropdown.setText(fileName, false);
+                prefs.edit().putString("chat_model", fileName).apply();
             }
         }
     }
@@ -154,7 +159,7 @@ public class ModelSelector extends Fragment {
                 name = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
             }
         } catch (Exception e) {
-            // Optionally handle or log error here
+            // Optional: log or handle error here
         }
         return name;
     }
