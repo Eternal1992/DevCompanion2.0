@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.devcompanion.R;
-import com.devcompanion.ChatMessage;
+import com.devcompanion.data.ChatMessage;
 
 public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
 
@@ -20,6 +20,6 @@ public class ChatMessageViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(ChatMessage chatMessage) {
         messageTextView.setText(chatMessage.getMessage());
-        // You can also add logic here to style user vs AI messages differently
+        // Optional: Style differently for user vs AI here
     }
 }
