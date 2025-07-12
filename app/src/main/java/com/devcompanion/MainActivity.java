@@ -59,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new ChatFragment())
                 .commit();
+        } else if (id == R.id.nav_model_selector) {
+            // Assuming ModelSelector exists
+            getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new ModelSelector())
+                .commit();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

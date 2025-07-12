@@ -42,6 +42,19 @@
             android:textColorHint="@color/hint_text"
             android:textSize="16sp" />
 
+        <!-- Mic Button (Speech) -->
+        <ImageButton
+            android:id="@+id/button_speech"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voice input"
+            android:padding="12dp"
+            android:src="@drawable/ic_mic"
+            android:tint="@color/text_primary" />
+
+        <!-- Send Button -->
         <ImageButton
             android:id="@+id/button_send"
             android:layout_width="48dp"
