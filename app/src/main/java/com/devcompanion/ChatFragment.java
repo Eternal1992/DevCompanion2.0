@@ -2,6 +2,7 @@ package com.devcompanion;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.text.TextUtils;
@@ -18,6 +19,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.devcompanion.ai.AIIntegrationHelper;
+import com.devcompanion.data.ChatDatabase;
+import com.devcompanion.data.ChatMessage;
+import com.devcompanion.data.ChatMessageDao;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +38,8 @@ public class ChatFragment extends Fragment {
     private ImageButton micButton;
     private ChatAdapter chatAdapter;
     private List<ChatMessage> messageList;
+    private ChatMessageDao chatDao;
+    private AIIntegrationHelper aiHelper;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -48,7 +56,7 @@ public class ChatFragment extends Fragment {
         recyclerView = view.findViewById(R.id.chat_recycler_view);
         inputMessage = view.findViewById(R.id.input_message);
         sendButton = view.findViewById(R.id.button_send);
-        micButton = view.findViewById(R.id.button_speech); // ← fixed ID here
+        micButton = view.findViewById(R.id.button_speech);
 
         messageList = new ArrayList<>();
         chatAdapter = new ChatAdapter(messageList);
@@ -56,8 +64,10 @@ public class ChatFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(chatAdapter);
 
-        sendButton.setOnClickListener(v -> sendMessage());
+        chatDao = ChatDatabase.getInstance(requireContext()).chatMessageDao();
+        aiHelper = new AIIntegrationHelper(requireContext());
 
+        sendButton.setOnClickListener(v -> sendMessage());
         micButton.setOnClickListener(v -> startVoiceInput());
 
         inputMessage.setOnEditorActionListener((v, actionId, event) -> {
@@ -68,7 +78,21 @@ public class ChatFragment extends Fragment {
             return false;
         });
 
+        loadChatHistory();
+
         return view;
+    }
+
+    private void loadChatHistory() {
+        AsyncTask.execute(() -> {
+            List<ChatMessage> history = chatDao.getAllMessages();
+            requireActivity().runOnUiThread(() -> {
+                messageList.clear();
+                messageList.addAll(history);
+                chatAdapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(messageList.size() - 1);
+            });
+        });
     }
 
     private void sendMessage() {
@@ -81,12 +105,26 @@ public class ChatFragment extends Fragment {
         recyclerView.scrollToPosition(messageList.size() - 1);
         inputMessage.setText("");
 
-        recyclerView.postDelayed(() -> {
-            ChatMessage botMessage = new ChatMessage("You said: " + message, false);
-            messageList.add(botMessage);
-            chatAdapter.notifyItemInserted(messageList.size() - 1);
-            recyclerView.scrollToPosition(messageList.size() - 1);
-        }, 1000);
+        AsyncTask.execute(() -> chatDao.insert(userMessage));
+
+        aiHelper.sendMessageToAI(message, new AIIntegrationHelper.AIResponseCallback() {
+            @Override
+            public void onResponse(String response) {
+                requireActivity().runOnUiThread(() -> {
+                    ChatMessage botMessage = new ChatMessage(response, false);
+                    messageList.add(botMessage);
+                    chatAdapter.notifyItemInserted(messageList.size() - 1);
+                    recyclerView.scrollToPosition(messageList.size() - 1);
+                    AsyncTask.execute(() -> chatDao.insert(botMessage));
+                });
+            }
+
+            @Override
+            public void onError(Exception e) {
+                e.printStackTrace();
+                // Optional: show toast or retry
+            }
+        });
     }
 
     private void startVoiceInput() {
@@ -99,7 +137,6 @@ public class ChatFragment extends Fragment {
             startActivityForResult(intent, SPEECH_REQUEST_CODE);
         } catch (Exception e) {
             e.printStackTrace();
-            // Optionally show a toast here
         }
     }
 
