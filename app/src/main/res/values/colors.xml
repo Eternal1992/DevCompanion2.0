@@ -28,4 +28,7 @@
     <color name="nav_background">#1A1A1A</color>
     <color name="nav_item_text">#FFFFFF</color>
     <color name="nav_item_icon">#B3B3B3</color>
+    <!-- Fixes for missing colors in layout -->
+    <color name="background">#121212</color>
+    <color name="accent">#03DAC5</color>
 </resources>
