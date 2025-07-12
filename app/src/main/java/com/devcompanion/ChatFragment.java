@@ -38,12 +38,11 @@ public class ChatFragment extends Fragment {
     private ImageButton micButton;
     private ChatAdapter chatAdapter;
     private List<ChatMessage> messageList;
+
     private ChatMessageDao chatDao;
     private AIIntegrationHelper aiHelper;
 
-    public ChatFragment() {
-        // Required empty public constructor
-    }
+    public ChatFragment() {}
 
     @Nullable
     @Override
@@ -85,10 +84,10 @@ public class ChatFragment extends Fragment {
 
     private void loadChatHistory() {
         AsyncTask.execute(() -> {
-            List<ChatMessage> history = chatDao.getAllMessages();
+            List<ChatMessage> savedMessages = chatDao.getAllMessages();
             requireActivity().runOnUiThread(() -> {
                 messageList.clear();
-                messageList.addAll(history);
+                messageList.addAll(savedMessages);
                 chatAdapter.notifyDataSetChanged();
                 recyclerView.scrollToPosition(messageList.size() - 1);
             });
@@ -99,30 +98,29 @@ public class ChatFragment extends Fragment {
         String message = inputMessage.getText().toString().trim();
         if (TextUtils.isEmpty(message)) return;
 
-        ChatMessage userMessage = new ChatMessage(message, true);
+        ChatMessage userMessage = new ChatMessage(message, true, System.currentTimeMillis());
         messageList.add(userMessage);
         chatAdapter.notifyItemInserted(messageList.size() - 1);
         recyclerView.scrollToPosition(messageList.size() - 1);
         inputMessage.setText("");
 
-        AsyncTask.execute(() -> chatDao.insert(userMessage));
+        AsyncTask.execute(() -> chatDao.insertMessage(userMessage));
 
         aiHelper.sendMessageToAI(message, new AIIntegrationHelper.AIResponseCallback() {
             @Override
             public void onResponse(String response) {
+                ChatMessage botMessage = new ChatMessage(response, false, System.currentTimeMillis());
                 requireActivity().runOnUiThread(() -> {
-                    ChatMessage botMessage = new ChatMessage(response, false);
                     messageList.add(botMessage);
                     chatAdapter.notifyItemInserted(messageList.size() - 1);
                     recyclerView.scrollToPosition(messageList.size() - 1);
-                    AsyncTask.execute(() -> chatDao.insert(botMessage));
                 });
+                AsyncTask.execute(() -> chatDao.insertMessage(botMessage));
             }
 
             @Override
             public void onError(Exception e) {
-                e.printStackTrace();
-                // Optional: show toast or retry
+                e.printStackTrace(); // Optionally log or show an error message
             }
         });
     }
