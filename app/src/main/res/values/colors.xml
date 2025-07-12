@@ -4,6 +4,8 @@
     <color name="colorPrimary">#121212</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="dark_background">#121212</color>
 
     <!-- Background and surface colors -->
     <color name="background">#121212</color>
