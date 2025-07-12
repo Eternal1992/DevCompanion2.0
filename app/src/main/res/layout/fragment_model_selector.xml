@@ -27,7 +27,7 @@
             android:textStyle="bold"
             android:layout_marginBottom="32dp" />
 
-        <!-- Chat Model Selector -->
+        <!-- Chat Model Section -->
         <TextView
             android:id="@+id/chat_model_label"
             android:layout_width="wrap_content"
@@ -37,21 +37,37 @@
             android:textColor="@color/text_primary"
             android:layout_marginBottom="8dp" />
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/chat_model_spinner"
+        <TextView
+            android:id="@+id/chat_model_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/accent"
-            android:dropDownHeight="wrap_content"
-            android:popupBackground="@color/surface"
-            android:padding="14dp"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/hint_text"
-            android:hint="Choose Chat Model"
-            android:layout_marginBottom="24dp"
-            app:endIconMode="dropdown_menu" />
+            android:text="No Chat Model Selected"
+            android:textColor="@color/text_secondary"
+            android:background="@color/button_background"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
 
-        <!-- Code Model Selector -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_pick_chat_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick Chat Model File"
+            android:textColor="@color/button_text"
+            android:backgroundTint="@color/accent"
+            app:cornerRadius="12dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_reset_chat_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reset Chat Model"
+            android:textColor="@color/button_text"
+            android:backgroundTint="@color/button_background"
+            app:cornerRadius="12dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Code Model Section -->
         <TextView
             android:id="@+id/code_model_label"
             android:layout_width="wrap_content"
@@ -61,19 +77,35 @@
             android:textColor="@color/text_primary"
             android:layout_marginBottom="8dp" />
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/code_model_spinner"
+        <TextView
+            android:id="@+id/code_model_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="No Code Model Selected"
+            android:textColor="@color/text_secondary"
+            android:background="@color/button_background"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_pick_code_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick Code Model File"
+            android:textColor="@color/button_text"
             android:backgroundTint="@color/accent"
-            android:dropDownHeight="wrap_content"
-            android:popupBackground="@color/surface"
-            android:padding="14dp"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/hint_text"
-            android:hint="Choose Code Model"
-            android:layout_marginBottom="32dp"
-            app:endIconMode="dropdown_menu" />
+            app:cornerRadius="12dp"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_reset_code_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reset Code Model"
+            android:textColor="@color/button_text"
+            android:backgroundTint="@color/button_background"
+            app:cornerRadius="12dp"
+            android:layout_marginBottom="32dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_confirm_models"

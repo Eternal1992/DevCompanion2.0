@@ -1,9 +1,29 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- App-wide dark theme -->
     <style name="Theme.DevCompanion" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Core colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorAccent</item>
+
+        <!-- Surface/background for Material views -->
+        <item name="colorBackground">@color/dark_background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
+
+        <!-- Android equivalents -->
+        <item name="android:windowBackground">@color/dark_background</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
-        <item name="android:windowBackground">@color/background</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+
+        <!-- Optional widget styling (safe defaults) -->
+        <item name="cardViewStyle">@style/Widget.MaterialComponents.CardView</item>
+        <item name="buttonStyle">@style/Widget.MaterialComponents.Button</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
     </style>
+
 </resources>

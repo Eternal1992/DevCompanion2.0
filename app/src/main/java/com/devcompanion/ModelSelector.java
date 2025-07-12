@@ -51,32 +51,60 @@ public class ModelSelector extends Fragment {
 
         prefs = requireActivity().getSharedPreferences("devcompanion_models", Activity.MODE_PRIVATE);
 
-        chatModelDisplay = new TextView(requireContext());
-        chatModelDisplay.setTextColor(getResources().getColor(R.color.text_primary));
-        codeModelDisplay = new TextView(requireContext());
-        codeModelDisplay.setTextColor(getResources().getColor(R.color.text_primary));
-
-        pickChatButton = new MaterialButton(requireContext());
-        pickChatButton.setText("Pick Chat Model File");
-        pickChatButton.setBackgroundTintList(requireContext().getColorStateList(R.color.accent));
-        pickChatButton.setTextColor(requireContext().getColor(R.color.button_text));
-        pickChatButton.setOnClickListener(v -> launchPicker(PICK_CHAT_MODEL_FILE));
-
-        pickCodeButton = new MaterialButton(requireContext());
-        pickCodeButton.setText("Pick Code Model File");
-        pickCodeButton.setBackgroundTintList(requireContext().getColorStateList(R.color.accent));
-        pickCodeButton.setTextColor(requireContext().getColor(R.color.button_text));
-        pickCodeButton.setOnClickListener(v -> launchPicker(PICK_CODE_MODEL_FILE));
-
+        // Initialize views from layout
+        chatModelDisplay = view.findViewById(R.id.chat_model_display);
+        codeModelDisplay = view.findViewById(R.id.code_model_display);
+        pickChatButton = view.findViewById(R.id.button_pick_chat_model);
+        pickCodeButton = view.findViewById(R.id.button_pick_code_model);
         confirmButton = view.findViewById(R.id.button_confirm_models);
+        resetChatButton = view.findViewById(R.id.button_reset_chat_model);
+        resetCodeButton = view.findViewById(R.id.button_reset_code_model);
         progressSpinner = view.findViewById(R.id.progress_spinner);
         debugStatus = view.findViewById(R.id.debug_status);
+
+        // Load saved filenames or set defaults
+        String savedChatModel = prefs.getString("chat_model", "");
+        if (!savedChatModel.isEmpty()) {
+            chatModelDisplay.setText(savedChatModel);
+            chatModelDisplay.setTextColor(getResources().getColor(R.color.text_primary));
+        } else {
+            chatModelDisplay.setText("No Chat Model Selected");
+            chatModelDisplay.setTextColor(getResources().getColor(R.color.text_secondary));
+        }
+
+        String savedCodeModel = prefs.getString("code_model", "");
+        if (!savedCodeModel.isEmpty()) {
+            codeModelDisplay.setText(savedCodeModel);
+            codeModelDisplay.setTextColor(getResources().getColor(R.color.text_primary));
+        } else {
+            codeModelDisplay.setText("No Code Model Selected");
+            codeModelDisplay.setTextColor(getResources().getColor(R.color.text_secondary));
+        }
+
+        // Button listeners
+        pickChatButton.setOnClickListener(v -> launchPicker(PICK_CHAT_MODEL_FILE));
+        pickCodeButton.setOnClickListener(v -> launchPicker(PICK_CODE_MODEL_FILE));
+
+        resetChatButton.setOnClickListener(v -> {
+            chatModelDisplay.setText("No Chat Model Selected");
+            chatModelDisplay.setTextColor(getResources().getColor(R.color.text_secondary));
+            prefs.edit().remove("chat_model").apply();
+            debugStatus.setText("Status: Chat model reset.");
+        });
+
+        resetCodeButton.setOnClickListener(v -> {
+            codeModelDisplay.setText("No Code Model Selected");
+            codeModelDisplay.setTextColor(getResources().getColor(R.color.text_secondary));
+            prefs.edit().remove("code_model").apply();
+            debugStatus.setText("Status: Code model reset.");
+        });
 
         confirmButton.setOnClickListener(v -> {
             String chat = chatModelDisplay.getText().toString();
             String code = codeModelDisplay.getText().toString();
 
-            if (chat.isEmpty() || code.isEmpty()) {
+            if (chat.equals("No Chat Model Selected") || chat.isEmpty()
+                    || code.equals("No Code Model Selected") || code.isEmpty()) {
                 Toast.makeText(getContext(), "Please select both models.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -94,35 +122,6 @@ public class ModelSelector extends Fragment {
                 debugStatus.setText("Status: Models saved.");
             }, 1000);
         });
-
-        resetChatButton = new MaterialButton(requireContext());
-        resetChatButton.setText("Reset Chat Model");
-        resetChatButton.setBackgroundTintList(requireContext().getColorStateList(R.color.accent));
-        resetChatButton.setTextColor(requireContext().getColor(R.color.button_text));
-        resetChatButton.setOnClickListener(v -> {
-            chatModelDisplay.setText("");
-            prefs.edit().remove("chat_model").apply();
-        });
-
-        resetCodeButton = new MaterialButton(requireContext());
-        resetCodeButton.setText("Reset Code Model");
-        resetCodeButton.setBackgroundTintList(requireContext().getColorStateList(R.color.accent));
-        resetCodeButton.setTextColor(requireContext().getColor(R.color.button_text));
-        resetCodeButton.setOnClickListener(v -> {
-            codeModelDisplay.setText("");
-            prefs.edit().remove("code_model").apply();
-        });
-
-        chatModelDisplay.setText(prefs.getString("chat_model", ""));
-        codeModelDisplay.setText(prefs.getString("code_model", ""));
-
-        ViewGroup rootLayout = view.findViewById(R.id.model_selector_root);
-        rootLayout.addView(chatModelDisplay);
-        rootLayout.addView(pickChatButton);
-        rootLayout.addView(codeModelDisplay);
-        rootLayout.addView(pickCodeButton);
-        rootLayout.addView(resetChatButton);
-        rootLayout.addView(resetCodeButton);
 
         return view;
     }
@@ -144,9 +143,11 @@ public class ModelSelector extends Fragment {
                 String fileName = getFileName(uri);
                 if (requestCode == PICK_CHAT_MODEL_FILE) {
                     chatModelDisplay.setText(fileName);
+                    chatModelDisplay.setTextColor(getResources().getColor(R.color.text_primary));
                     prefs.edit().putString("chat_model", fileName).apply();
                 } else if (requestCode == PICK_CODE_MODEL_FILE) {
                     codeModelDisplay.setText(fileName);
+                    codeModelDisplay.setTextColor(getResources().getColor(R.color.text_primary));
                     prefs.edit().putString("code_model", fileName).apply();
                 }
                 debugStatus.setText("Status: Selected file: " + fileName);
@@ -158,9 +159,13 @@ public class ModelSelector extends Fragment {
         String name = "unknown";
         try (Cursor cursor = requireContext().getContentResolver().query(uri, null, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
-                name = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                if (index >= 0) {
+                    name = cursor.getString(index);
+                }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return name;
     }
 }

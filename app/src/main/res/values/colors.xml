@@ -1,35 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Brand / primary colors -->
-    <color name="colorPrimary">#BB86FC</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
 
-    <!-- Base colors -->
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
+    <!-- App-wide theme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Material color roles -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorAccent</item>
 
-    <!-- Background and surface -->
-    <color name="background">#121212</color>
-    <color name="surface">#1E1E1E</color>
-    <color name="dark_background">#121212</color>
-    <color name="input_background">#1E1E1E</color>
+        <!-- Material surfaces (dark-friendly) -->
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorBackground">@color/dark_background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
 
-    <!-- Text colors -->
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#B3B3B3</color>
-    <color name="hint_text">#B0B0B0</color>
+        <!-- Android standard fallbacks -->
+        <item name="android:colorBackground">@color/dark_background</item>
+        <item name="android:windowBackground">@color/dark_background</item>
+        <item name="android:textColor">@color/white</item>
 
-    <!-- Accent and theme tinting -->
-    <color name="accent">#BB86FC</color>
+        <!-- Widget compatibility -->
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="buttonStyle">@style/Widget.MaterialComponents.Button</item>
+        <item name="cardViewStyle">@style/Widget.MaterialComponents.CardView</item>
+    </style>
 
-    <!-- Drawer / navigation -->
-    <color name="nav_background">#1A1A1A</color>
-    <color name="nav_item_text">#FFFFFF</color>
-    <color name="nav_item_icon">#B3B3B3</color>
-
-    <!-- Buttons and borders -->
-    <color name="button_background">#2C2C2C</color>
-    <color name="button_text">#FFFFFF</color>
-    <color name="divider">#333333</color>
 </resources>
