@@ -1,72 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/model_selector_card"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="16dp"
-    android:background="@color/background"
-    app:cardElevation="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardBackgroundColor="@color/surface"
-    android:padding="24dp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.devcompanion">
 
-    <LinearLayout
-        android:id="@+id/model_selector_root"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
-        <TextView
-            android:id="@+id/model_selector_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select AI Models"
-            android:textSize="26sp"
-            android:textColor="@color/text_primary"
-            android:textStyle="bold"
-            android:layout_marginBottom="32dp" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_confirm_models"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Confirm Models"
-            android:textColor="@color/button_text"
-            android:backgroundTint="@color/accent"
-            app:cornerRadius="12dp"
-            android:padding="16dp"
-            android:textAllCaps="false"
-            app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:rippleColor="?attr/colorControlHighlight" />
+    </application>
 
-        <LinearLayout
-            android:id="@+id/debug_area"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="24dp">
-
-            <ProgressBar
-                android:id="@+id/progress_spinner"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:indeterminate="true"
-                android:visibility="gone"
-                android:layout_marginEnd="12dp"
-                style="?android:attr/progressBarStyleSmall" />
-
-            <TextView
-                android:id="@+id/debug_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status: Idle"
-                android:textColor="@color/text_secondary"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-</com.google.android.material.card.MaterialCardView>
+</manifest>
