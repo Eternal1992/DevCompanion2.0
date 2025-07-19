@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ethereon</string>
+
+    <!-- Navigation -->
+    <string name="nav_model_selector">Model Selector</string>
+    <string name="nav_chat">Chat</string>
+    <string name="nav_project_manager">Project Manager</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Buttons -->
+    <string name="btn_select_chat_model">Select Chat Model</string>
+    <string name="btn_start_chat">Start Chat</string>
+    <string name="btn_create_project">Create Project</string>
+    <string name="btn_open_project">Open Project</string>
+    <string name="btn_save_project">Save Project</string>
+    <string name="btn_select_code_model">Select Code Model</string>
+
+    <!-- Labels -->
+    <string name="label_chat_model_path">Chat Model Path:</string>
+    <string name="label_code_model_path">Code Model Path:</string>
+    <string name="label_project_name">Project Name:</string>
+    <string name="label_language">Language:</string>
+
+    <!-- Messages -->
+    <string name="msg_loading_model">Loading model, please wait...</string>
+    <string name="msg_no_model_selected">No model selected</string>
+    <string name="msg_model_loaded_successfully">Model loaded successfully!</string>
+    <string name="msg_model_load_failed">Failed to load model.</string>
+    <string name="msg_invalid_path">Invalid path. Please select a valid model file.</string>
+
+    <!-- Prompts -->
+    <string name="prompt_enter_project_name">Enter your project name</string>
+    <string name="prompt_choose_language">Choose a programming language</string>
+
+    <!-- Expansion -->
+    <string name="expansion_header_welcome">Welcome to Ethereon</string>
+    <string name="expansion_loading_message">Awakening Nova...</string>
+</resources>

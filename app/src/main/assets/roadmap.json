@@ -1,0 +1,36 @@
+{
+  "projects": [
+    {
+      "name": "PrismSort",
+      "description": "AI-powered media organizer with duplicate detection and smart sorting.",
+      "status": "In Progress",
+      "progress": 45,
+      "milestones": [
+        {"name": "Core sorting engine", "completed": true},
+        {"name": "Duplicate review UI", "completed": true},
+        {"name": "Photo filters", "completed": false},
+        {"name": "SSD file transfer", "completed": false}
+      ]
+    },
+    {
+      "name": "Ethereon AI",
+      "description": "Offline voice AI assistant with customizable behavior and memory.",
+      "status": "Planned",
+      "progress": 10,
+      "milestones": [
+        {"name": "Core assistant framework", "completed": false},
+        {"name": "Avatar customization", "completed": false}
+      ]
+    },
+    {
+      "name": "GameSense AI",
+      "description": "Mobile game analyzer with real-time overlay coaching and strategy.",
+      "status": "Planned",
+      "progress": 5,
+      "milestones": [
+        {"name": "UI scanning logic", "completed": false},
+        {"name": "Coach Mode overlay", "completed": false}
+      ]
+    }
+  ]
+}

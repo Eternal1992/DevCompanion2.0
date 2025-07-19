@@ -1,0 +1,180 @@
+.
+├── app
+│   ├── build.gradle
+│   ├── proguard-rules.pro
+│   └── src
+│       └── main
+│           ├── AndroidManifest.xml
+│           ├── JniLibs
+│           │   └── arm64-v8a
+│           │       └── libllama.so
+│           ├── assets
+│           │   ├── porcupine
+│           │   │   └── Hey-Nova_en_android_v3_0_0.ppn
+│           │   ├── roadmap.json
+│           │   ├── scripts
+│           │   │   └── compile.sh
+│           │   └── todo.json
+│           ├── cpp
+│           │   ├── CMakeLists.txt
+│           │   ├── llama.cpp
+│           │   ├── llama.h
+│           │   └── llama_jni.cpp
+│           ├── java
+│           │   └── com
+│           │       └── ethereon
+│           │           ├── app
+│           │           │   ├── AppBuilder.java
+│           │           │   ├── AppInitializer.java
+│           │           │   ├── BuildEngineService.java
+│           │           │   ├── BuildProcessor.java
+│           │           │   ├── ChatAdapter.java
+│           │           │   ├── ChatFragment.java
+│           │           │   ├── ChatMessage.java
+│           │           │   ├── CodeAnalyzer.java
+│           │           │   ├── DebugFragment.java
+│           │           │   ├── DebugOverlayManager.java
+│           │           │   ├── DebugPagerAdapter.java
+│           │           │   ├── ExpansionManager.java
+│           │           │   ├── ExpansionMetaDataManager.java
+│           │           │   ├── ExpansionsFragment.java
+│           │           │   ├── FileUtils.java
+│           │           │   ├── LlamaNative.java
+│           │           │   ├── LogViewerFragment.java
+│           │           │   ├── MainActivity.java
+│           │           │   ├── MainViewModel.java
+│           │           │   ├── ModelAdapter.java
+│           │           │   ├── ModelChatActivity.java
+│           │           │   ├── ModelHandler.java
+│           │           │   ├── ModelItem.java
+│           │           │   ├── ModelLoader.java
+│           │           │   ├── ModelSelectorFragment.java
+│           │           │   ├── NovaOrbController.java
+│           │           │   ├── NovaVoiceController.java
+│           │           │   ├── ProjectDetailActivity.java
+│           │           │   ├── RoadmapFragment.java
+│           │           │   ├── SettingsActivity.java
+│           │           │   ├── SettingsFragment.java
+│           │           │   ├── ToDoAdapter.java
+│           │           │   ├── ToDoItem.java
+│           │           │   ├── Utils
+│           │           │   │   └── Utils.java
+│           │           │   ├── VoiceInputHandler.java
+│           │           │   ├── ai
+│           │           │   │   └── NovaCodeDispatcher.java
+│           │           │   ├── build
+│           │           │   │   ├── AppBuilderEngine.java
+│           │           │   │   ├── AppBuilderOrchestrator.java
+│           │           │   │   ├── AppCompiler.java
+│           │           │   │   ├── BuildOrchestrationLog.java
+│           │           │   │   ├── BuildSession.java
+│           │           │   │   ├── CodeModelExecutor.java
+│           │           │   │   ├── FinalApkBuilder.java
+│           │           │   │   ├── NovaProjectGenerator.java
+│           │           │   │   ├── ProjectAssembler.java
+│           │           │   │   └── ProjectScaffolder.java
+│           │           │   ├── creation
+│           │           │   │   └── AppCreationController.java
+│           │           │   ├── interfaces
+│           │           │   │   └── BuildStatusCallback.java
+│           │           │   ├── memory
+│           │           │   │   ├── ChatLogScanner.java
+│           │           │   │   ├── EmotionTaggedMemoryEnhancer.java
+│           │           │   │   ├── MemoryAccessAPI.java
+│           │           │   │   ├── MemoryBackupScheduler.java
+│           │           │   │   ├── MemoryBackupService.java
+│           │           │   │   ├── MemoryCompressor.java
+│           │           │   │   ├── MemoryGraphManager.java
+│           │           │   │   ├── MemoryManager.java
+│           │           │   │   ├── MemoryRecallProcessor.java
+│           │           │   │   ├── MemoryRetentionEngine.java
+│           │           │   │   ├── MemoryUtils.java
+│           │           │   │   ├── MultimodalMemoryManager.java
+│           │           │   │   ├── NovaBrain.java
+│           │           │   │   └── NovaMemoryManager.java
+│           │           │   ├── models
+│           │           │   │   ├── AppBlueprintGenerator.java
+│           │           │   │   └── AppIdeaModel.java
+│           │           │   ├── ui
+│           │           │   │   ├── AppCreatorFragment.java
+│           │           │   │   └── BuildProgressFragment.java
+│           │           │   └── voice
+│           │           │       ├── BootBroadcastReceiver.java
+│           │           │       ├── CommandRouter.java
+│           │           │       ├── CustomTTSManager.java
+│           │           │       ├── EmotionToneAnalyzer.java
+│           │           │       ├── FloatingOrbService.java
+│           │           │       ├── FloatingOrbView.java
+│           │           │       ├── NovaAppCreationFlow.java
+│           │           │       ├── NovaCommandRouter.java
+│           │           │       ├── NovaIntentHandler.java
+│           │           │       ├── NovaResponder.java
+│           │           │       ├── NovaSpeechRecognizer.java
+│           │           │       ├── NovaVoiceService.java
+│           │           │       ├── SpeechIntentService.java
+│           │           │       ├── VoiceCommandProcessor.java
+│           │           │       └── VoiceInputHandler.java
+│           │           └── tools
+│           │               └── ProjectFileManager.java
+│           └── res
+│               ├── Mipmap-hdpi
+│               │   ├── ic_launcher.png
+│               │   └── ic_launcher_rounded.png
+│               ├── Mipmap-mdpi
+│               │   ├── ic_launcher.png
+│               │   └── ic_launcher_rounded.png
+│               ├── Mipmap-xhdpi
+│               │   ├── ic_launcher.png
+│               │   └── ic_launcher_rounded.png
+│               ├── Mipmap-xxhdpi
+│               │   ├── ic_launcher.png
+│               │   └── ic_launcher_rounded.png
+│               ├── Mipmap-xxxhdpi
+│               │   ├── ic_launcher.png
+│               │   └── ic_launcher_rounded.png
+│               ├── drawable
+│               │   ├── ethereon_splash.png
+│               │   └── orb_pulse.png
+│               ├── layout
+│               │   ├── activity_main.xml
+│               │   ├── activity_project_detail.xml
+│               │   ├── dialog_model_picker.xml
+│               │   ├── fragment_app_creator.xml
+│               │   ├── fragment_build_progress.xml
+│               │   ├── fragment_chat.xml
+│               │   ├── fragment_dashboard.xml
+│               │   ├── fragment_debug.xml
+│               │   ├── fragment_expansions.xml
+│               │   ├── fragment_log_viewer.xml
+│               │   ├── fragment_model_selector.xml
+│               │   ├── fragment_roadmap.xml
+│               │   ├── fragment_settings.xml
+│               │   ├── item_chat_ai.xml
+│               │   ├── item_chat_message.xml
+│               │   ├── item_chat_user.xml
+│               │   ├── item_roadmap.xml
+│               │   └── view_floating_orb.xml
+│               ├── menu
+│               │   └── navigation.xml
+│               └── values
+│                   ├── colors.xml
+│                   ├── strings.xml
+│                   ├── styles.xml
+│                   └── themes
+│                       └── themes.xml
+├── build.gradle
+├── expansions
+├── filelist.txt
+├── filelist_with_sizes.txt
+├── filetree.txt
+├── gradle
+├── gradle.properties
+│   └── gradle.properties
+├── gradlew
+│   └── gradlew
+├── gradlew.bat
+│   └── gradlew.bat
+└── settings.gradle
+    └── settings.gradle
+
+41 directories, 137 files

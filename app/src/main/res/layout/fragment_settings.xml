@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/settingsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="App Settings"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="12dp" />
+
+        <Switch
+            android:id="@+id/switchPerformanceMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable Performance Mode"
+            android:textColor="#FFFFFF" />
+
+        <Switch
+            android:id="@+id/switchAutoCompress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Auto-Compress Project Files"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp" />
+
+        <Switch
+            android:id="@+id/switchEnableLogs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable Debug Logs"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp" />
+
+        <!-- Voice Identity Toggle -->
+        <Switch
+            android:id="@+id/switchVoiceIdentity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable Voice Identity Recognition"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="12dp" />
+
+        <!-- Emotion Detection Toggle -->
+        <Switch
+            android:id="@+id/switchEmotionDetection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable Emotion Detection Awareness"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp" />
+
+        <!-- ✅ Memory Backup Toggle -->
+        <Switch
+            android:id="@+id/switchMemoryBackup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enable Memory Backup System"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/versionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Version Info"
+            android:textColor="#AAAAAA"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</ScrollView>
