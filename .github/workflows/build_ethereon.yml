@@ -20,18 +20,11 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      - name: 🧱 Grant execute permissions for Gradle
-        run: |
-          chmod +x ./gradlew
-          chmod +x gradle/wrapper/gradle-wrapper.jar || echo "jar not marked executable"
-          chmod +x gradle/wrapper/gradle-wrapper.properties || echo "properties not marked executable"
+      - name: 🧱 Grant execute permission to Gradle
+        run: chmod +x ./gradlew
 
-      - name: 🔍 DEBUG: Show gradle wrapper contents
-        run: |
-          echo "🧩 Listing gradle wrapper folder..."
-          ls -la gradle/wrapper/
-          echo "🧩 Checking contents of gradle-wrapper.jar..."
-          unzip -l gradle/wrapper/gradle-wrapper.jar || echo "Failed to unzip JAR"
+      - name: 🧪 Debug Gradle Wrapper Directory
+        run: ls -R .
 
       - name: ⚙️ Build with Gradle
         run: ./gradlew assembleDebug
